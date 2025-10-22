@@ -27,7 +27,7 @@ public class CardGame {
         int expectedCards = 8 * numPlayers;
         if (pack.size() != expectedCards) {
             throw new IllegalArgumentException(
-                    "Invalid pack: expected " + expectedCards + " cards, but got " + pack.size());
+                    "Invalid pack. expected " + expectedCards + " cards, but got " + pack.size());
         }
     }
 
@@ -101,13 +101,14 @@ public class CardGame {
 
             boolean hasWinner = game.checkInitialWinner();
             if (!hasWinner) {
-                System.out.println("No initial winner. Game setup complete, ready for play phase.");
+                System.out.println("No initial winner. Game setup complete and ready for play phase.");
             }
 
         } catch (Exception e) {
-            System.err.println("Error initializing game: " + e.getMessage());
+            System.err.println("Error initializing game. " + e.getMessage());
         } finally {
             scanner.close();
         }
     }
 }
+
