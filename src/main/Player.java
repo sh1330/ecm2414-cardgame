@@ -40,4 +40,14 @@ public class Player {
     return id;
   }
 
+  public Card chooseDiscard() {
+    int target = this.id;
+    for (int i = 0; i < hand.size(); i++){
+      if (hand.get(i).getValue() != target) {
+        return hand.remove(i);
+      }
+    }
+    return hand.remove(0);
+  }
+
 }

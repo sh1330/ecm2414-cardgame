@@ -84,6 +84,56 @@ public class CardGame {
         return false;
     }
 
+    private CardDeck leftDeck(int playerId) {
+      return decks.get(playerId - 1);
+    }
+
+    private CardDeck rightDeck(int playerId) {
+      int n = decks.size();
+      return decks.get(playerId % n);
+    }
+
+
+    private void printAdjacencyMap() {
+        System.out.println("Adjacency map (Player -> LeftDeck, RightDeck)");
+        for (Player p : players) {
+            int i = p.getId();
+            System.out.printf("Player %d -> L:%d  R:%d%n",
+                i, leftDeck(i).getId(), rightDeck(i).getId());
+        }
+    }
+
+    private boolean takeTurn(Player p) {
+      // check if win
+      if (p.hasWinningHand()) return true;
+
+      CardDeck left = leftDeck(p.getId());
+      CardDeck right = rightDeck(p.getId());
+
+      //discard right, draw left
+      Card discarded = p.chooseDiscard();
+      right.addCard(discarded);
+
+      Card drawn = left.drawCard();
+      if (drawn != null) p.addCard(drawn);
+
+      return p.hasWinningHand();
+    }
+
+    // loops through until someone wins
+    public int playPhase() {
+      while (true) {
+        for (Player p : players) {
+          if (takeTurn(p)) {
+            System.out.println("Player" + p.getId() + " wins");
+            return p.getId();
+          }
+        }
+      }
+    }
+
+
+
     //Main entry point for the program.
      
     public static void main(String[] args) {
@@ -103,6 +153,16 @@ public class CardGame {
             if (!hasWinner) {
                 System.out.println("No initial winner. Game setup complete and ready for play phase.");
             }
+
+            game.printAdjacencyMap();      
+            int winnerId = game.playPhase();
+            game.showInitialState();
+
+            
+
+            
+
+
 
         } catch (Exception e) {
             System.err.println("Error initializing game. " + e.getMessage());
