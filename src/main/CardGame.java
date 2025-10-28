@@ -140,35 +140,54 @@ public class CardGame {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            System.out.println("Enter number of players:");
-            int numPlayers = Integer.parseInt(scanner.nextLine().trim());
+            int numPlayers = 0;
+            String packFilePath = "";
 
-            System.out.println("Enter pack file path:");
-            String packFilePath = scanner.nextLine().trim();
+            while (numPlayers <= 0) {
+                System.out.println("Enter number of players (must be positive):");
+                String input = scanner.nextLine().trim();
+                try {
+                    numPlayers = Integer.parseInt(input);
+                    if (numPlayers <= 0) {
+                        System.out.println("Number must be positive.");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter an integer.");
+                }
+            }
+
+            boolean validPack = false;
+            while (!validPack) {
+                System.out.println("Enter pack file path:");
+                packFilePath = scanner.nextLine().trim();
+                File f = new File(packFilePath);
+                if (!f.exists()) {
+                    System.out.println("File not found. Try again.");
+                    continue;
+                }
+
+            // Temporary validation read
+                List<Card> tempPack = PackReader.readPack(packFilePath);
+                if (tempPack.size() != 8 * numPlayers) {
+                    System.out.println("Invalid pack size. Expected " + (8 * numPlayers) + " cards.");
+                    continue;
+                }
+                validPack = true;
+            }
 
             CardGame game = new CardGame(numPlayers, packFilePath);
             game.showInitialState();
 
             boolean hasWinner = game.checkInitialWinner();
             if (!hasWinner) {
-                System.out.println("No initial winner. Game setup complete and ready for play phase.");
+                System.out.println("No initial winner. Game setup complete, ready for play phase.");
             }
 
-            game.printAdjacencyMap();      
-            int winnerId = game.playPhase();
-            game.showInitialState();
-
-            
-
-            
-
-
-
         } catch (Exception e) {
-            System.err.println("Error initializing game. " + e.getMessage());
+            System.err.println("Error initializing game: " + e.getMessage());
         } finally {
             scanner.close();
         }
-    }
-}
+    } 
 
+}  
