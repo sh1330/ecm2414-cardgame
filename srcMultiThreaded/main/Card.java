@@ -1,4 +1,4 @@
-public class Card {
+public final class Card {
   
   private final int value;
 
