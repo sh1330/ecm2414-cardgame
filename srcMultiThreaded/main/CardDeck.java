@@ -1,38 +1,37 @@
 import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.Deque;
 
-public class CardDeck {
+public final class CardDeck {
+    private static final Object TURN_LOCK = new Object();
+    private final Deque<Card> q = new ArrayDeque<>();
 
-  private int id;
-  private Deque<Card> cards;
+    public CardDeck() { }
 
-  public CardDeck(int id) {
-    this.id = id;
-    this.cards = new ArrayDeque<>();
-  }
-
-  public void addCard(Card card) {
-    cards.addLast(card);
-  }
-
-  public Card drawCard() {
-    return cards.pollFirst();
-  }
-
-  public String getContents() {
-    String contents = "";
-    for (Card c : cards) {
-      contents += c.getValue() + " ";
+    public CardDeck(Collection<Card> init) {
+      q.addAll(init);
     }
-    return contents;
-  }
 
-  public int getId(){
-    return id;
-  }
+    public synchronized int size() { return q.size(); }
 
-  public int getSize() {
-    return cards.size();
-  }
-  
+    public synchronized boolean isEmpty() {
+      return q.isEmpty();
+    }
+
+    public synchronized void discardRight(Card c) {
+      q.addLast(c);
+    }
+
+    public synchronized Card drawLeft() { 
+      return q.pollFirst();
+    }
+
+    public Card drawThenDiscardTo(CardDeck rightDeck, Card discardCard) {
+        synchronized (TURN_LOCK) {
+            Card drawn;
+            synchronized (this) { drawn = q.pollFirst(); }
+            synchronized (rightDeck) { rightDeck.q.addLast(discardCard); }
+            return drawn;
+        }
+    }
 }
