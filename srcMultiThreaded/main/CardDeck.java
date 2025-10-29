@@ -1,49 +1,68 @@
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
 public final class CardDeck {
-    private static final Object TURN_LOCK = new Object();
-
     private final int id;
-    private final Deque<Card> cards;
+    private final Deque<Card> q = new ArrayDeque<>();
 
     public CardDeck(int id) {
         this.id = id;
-        this.cards = new ArrayDeque<>();
     }
 
-    public synchronized void addCard(Card card) {
-        cards.addLast(card);
+    public int getId() { return id; }
+
+    
+    public synchronized void addCard(Card c) {
+        q.addLast(c);
     }
 
     public synchronized Card drawCard() {
-        return cards.pollFirst();
+        return q.pollFirst();
     }
 
+    public synchronized int size() { return q.size(); }
+
+    public synchronized boolean isEmpty() { return q.isEmpty(); }
+
+    
+    public synchronized List<Integer> snapshot() {
+        List<Integer> vals = new ArrayList<>(q.size());
+        for (Card c : q) vals.add(c.getValue());
+        return vals;
+    }
+    
     public synchronized String getContents() {
-        String contents = "";
-        for (Card c : cards) {
-            contents += c.getValue() + " ";
+      return contentsString();
+    }
+
+    
+    public synchronized String contentsString() {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (Card c : q) {
+            if (!first) sb.append(' ');
+            sb.append(c.getValue());
+            first = false;
         }
-        return contents;
-    }
-
-    public synchronized int getSize() {
-        return cards.size();
-    }
-
-    public int getId() {
-        return id;
+        return sb.toString();
     }
 
     public Card drawThenDiscardTo(CardDeck rightDeck, Card discardCard) {
-        synchronized (TURN_LOCK) {
-            Card drawn;
-            synchronized (this) { drawn = cards.pollFirst(); }
-            synchronized (rightDeck) { rightDeck.cards.addLast(discardCard); }
-            return drawn;
+        if (rightDeck == null) throw new IllegalArgumentException("rightDeck is null");
+        if (discardCard == null) throw new IllegalArgumentException("discardCard is null");
+
+        CardDeck first = this.id <= rightDeck.id ? this : rightDeck;
+        CardDeck second = this.id <= rightDeck.id ? rightDeck : this;
+
+        synchronized (first) {
+            synchronized (second) {
+                Card drawn = q.pollFirst();
+                rightDeck.q.addLast(discardCard);
+                return drawn;
+            }
         }
     }
 }
-
