@@ -1,0 +1,23 @@
+Player 3 initial hand: 3 2 1 4
+Player 3 discards 2 to deck 1
+Player 3 current hand: 3 1 4 3
+Player 3 discards 1 to deck 1
+Player 3 current hand: 3 4 3 2
+Player 3 discards 4 to deck 1
+Player 3 current hand: 3 3 2 1
+Player 3 discards 2 to deck 1
+Player 3 current hand: 3 3 1 4
+Player 3 discards 1 to deck 1
+Player 3 current hand: 3 3 4 1
+Player 3 discards 4 to deck 1
+Player 3 current hand: 3 3 1 4
+Player 3 discards 1 to deck 1
+Player 3 current hand: 3 3 4 3
+Player 3 discards 4 to deck 1
+Player 3 current hand: 3 3 3 1
+Player 3 discards 1 to deck 1
+Player 3 current hand: 3 3 3 4
+Player 3 discards 4 to deck 1
+Player 3 current hand: 3 3 3 3
+Player 3 has been informed player 1 has won
+Player 3 final hand: 3 3 3 3

@@ -1,11 +1,20 @@
-
-import java.io.File;
-import java.util.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class PackReader {
-    public static List<Card> readPack(String filePath) {
+    public static List<Card> readPack(String path) {
+        if (path == null || path.trim().isEmpty()) {
+            throw new IllegalArgumentException("Pack file path is empty.");
+        }
+
         List<Card> cards = new ArrayList<>();
-        try (Scanner scanner = new Scanner(new File(filePath))) {
+        try (InputStream inputStream = new FileInputStream(path);
+             Scanner scanner = new Scanner(inputStream)) {
+
             int lineNo = 0;
             while (scanner.hasNextLine()) {
                 lineNo++;
@@ -16,19 +25,20 @@ public class PackReader {
                 try {
                     v = Integer.parseInt(line);
                 } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException("Invalid number on line " + lineNo + " in " + filePath);
+                    throw new IllegalArgumentException("Invalid number on line " + lineNo + " in " + path);
                 }
 
                 if (v < 0) {
-                    throw new IllegalArgumentException("Negative card value on line " + lineNo + " in " + filePath);
+                    throw new IllegalArgumentException("Negative card value on line " + lineNo + " in " + path);
                 }
 
                 cards.add(new Card(v));
             }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("Pack file not found: " + path, e);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to open and read the pack from " + filePath, e);
+            throw new RuntimeException("Failed to open and read the pack from " + path, e);
         }
         return cards;
     }
 }
-
