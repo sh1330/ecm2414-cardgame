@@ -20,7 +20,7 @@ public class PackReaderTest {
         }
 
         List<Card> cards = PackReader.readPack(temp.getAbsolutePath());
-        assertEquals(8, cards.size(), "Should read 8 cards from valid file");
+        assertEquals(8, cards.size(), "Should read 8 cards from a valid file");
     }
 
     @Test

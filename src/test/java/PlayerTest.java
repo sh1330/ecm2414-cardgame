@@ -10,7 +10,7 @@ public class PlayerTest {
         for (int i = 0; i < 4; i++) {
             p1.addCard(new Card(3));
         }// four of a kind should win
-        assertTrue(p1.hasWinningHand(), "Player should have a winning hand when all 4 are same value");
+        assertTrue(p1.hasWinningHand(), "Player should have a winning hand when four of a kind");
     }
 
     @Test
@@ -20,7 +20,7 @@ public class PlayerTest {
         p2.addCard(new Card(2));
         p2.addCard(new Card(3));
         p2.addCard(new Card(4)); //losing hand
-        assertFalse(p2.hasWinningHand(), "Mixed values should not be a winning hand");
+        assertFalse(p2.hasWinningHand(), "Mixed values is a losing hand");
     }
 
     @Test

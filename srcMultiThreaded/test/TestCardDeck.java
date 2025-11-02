@@ -46,6 +46,6 @@ public class TestCardDeck {
             // Assert with threads correct
         assertFalse(t1.isAlive(), "t1 should finish");
         assertFalse(t2.isAlive(), "t2 should finish");
-        assertEquals(2000, deckSize(sharedDeck), "Expected 2000 cards");
+        assertEquals(2000, deckSize(sharedDeck), "Expected to be 2000 cards");
     }
 }
