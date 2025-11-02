@@ -18,7 +18,7 @@ public class CardGameTest {
                 pw.println(i);
             }
         }
-
+        //construct game with valid inputs and object is created
         CardGame game = new CardGame(2, temp.getAbsolutePath());
         assertNotNull(game, "CardGame should be constructed with valid inputs");
     }

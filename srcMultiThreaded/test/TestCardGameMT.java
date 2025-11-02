@@ -14,7 +14,7 @@ public class TestCardGameMT {
     @Test
     void gameRunsToCompletion_under8sTimeout() throws Exception {
         int numPlayers = 3;
-
+        // create a valid pack with 8*numplayers
         Path packPath = tempDir.resolve("pack.txt");
         try (PrintWriter pw = new PrintWriter(packPath.toFile())) {
             for (int i = 0; i < 8 * numPlayers; i++) {
@@ -22,15 +22,12 @@ public class TestCardGameMT {
             }
         }
 
-        CardGame g = new CardGame(numPlayers, packPath.toString());
+        CardGame g = new CardGame(numPlayers, packPath.toString()); //run the play phase and measure time
         long start = System.currentTimeMillis();
         g.playPhase();
         long elapsed = System.currentTimeMillis() - start;
 
-        // Optional assertions if your API supports them:
-        // assertNotNull(g.getWinner()); or assertTrue(g.getWinnerId() > 0);
-        // assertTrue(g.isFinished()); or assertTrue(g.isGameOver());
-
+            // game completes in reasonable time bound 
         assertTrue(elapsed <= 8000, "Game should finish within 8s (was " + elapsed + " ms)");
     }
 }

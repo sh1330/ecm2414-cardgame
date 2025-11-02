@@ -13,6 +13,7 @@ public class TestCardDeck {
 
     @Test
     void fifoOrder() {
+               // capacity 1 forces discards/behavior decisions in some implementations but here we just add and draw to check FIFO order.
         CardDeck deck = new CardDeck(1);
         deck.addCard(new Card(10));
         deck.addCard(new Card(20));
@@ -29,11 +30,12 @@ public class TestCardDeck {
 
     @Test
     void threadSafety_addsFromTwoThreads() throws InterruptedException {
+        //Shared deck and two threads with 1000 cards each
         CardDeck sharedDeck = new CardDeck(2);
         Runnable adder = () -> {
             for (int i = 0; i < 1000; i++) sharedDeck.addCard(new Card(i));
         };
-
+            //Start with reasonable timeout to avoid deadlock
         Thread t1 = new Thread(adder);
         Thread t2 = new Thread(adder);
         t1.start();
@@ -41,7 +43,7 @@ public class TestCardDeck {
 
         t1.join(5000);
         t2.join(5000);
-
+            // Assert with threads correct
         assertFalse(t1.isAlive(), "t1 should finish");
         assertFalse(t2.isAlive(), "t2 should finish");
         assertEquals(2000, deckSize(sharedDeck), "Expected 2000 cards");

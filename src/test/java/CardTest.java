@@ -12,5 +12,5 @@ public class CardTest {
     @Test
     void toString_returnsValueString() {
         assertEquals("7", new Card(7).toString());
-    }
+    }   
 }

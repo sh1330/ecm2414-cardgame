@@ -10,9 +10,6 @@ public class TestPlayerLogic {
 
         // Non-winning hand
         Player p = new Player(1); // constructor requires only id
-        // If Player needs decks set separately, do it here if you have setters:
-        // p.setLeftDeck(left);
-        // p.setRightDeck(right);
 
         p.addCard(new Card(1));
         p.addCard(new Card(2));
@@ -27,7 +24,6 @@ public class TestPlayerLogic {
 
         // Discard logic
         p = new Player(2);
-        // If Player needs to know its id to keep matching value cards, constructor already has id=2
         p.addCard(new Card(2));  // matching value
         p.addCard(new Card(5));  // should be discarded
         Card discarded = p.chooseDiscard();

@@ -5,6 +5,7 @@ public class TestCard {
 
     @Test
     void cardStoresValue() {
+                // Verify that the value passed to the constructor is returned by getValue()
         Card c = new Card(10);
         assertEquals(10, c.getValue());
     }
