@@ -1,72 +1,37 @@
-// Tests the Player class logic in isolation 
- 
-public class TestPlayerLogic {
-    public static void main(String[] args) {
-        System.out.println("=== Running TestPlayerLogic ===");
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-        // Stub decks and dummy game to satisfy constructor
+public class TestPlayerLogic {
+
+    @Test
+    void nonWinningAndWinningHands_andDiscardLogic() {
         CardDeck left = new CardDeck(1);
         CardDeck right = new CardDeck(2);
-        CardGame dummyGame = new CardGameStub(); // stub uses dummy pack file
 
-        // ---- Test 1: Non-winning hand ----
-        Player p = new Player(1, left, right, dummyGame);
+        // Non-winning hand
+        Player p = new Player(1); // constructor requires only id
+        // If Player needs decks set separately, do it here if you have setters:
+        // p.setLeftDeck(left);
+        // p.setRightDeck(right);
+
         p.addCard(new Card(1));
         p.addCard(new Card(2));
         p.addCard(new Card(3));
         p.addCard(new Card(4));
+        assertFalse(p.hasWinningHand(), "Should not have a winning hand");
 
-        if (p.hasWinningHand()) {
-            System.out.println("FAIL: Should not have a winning hand yet");
-            return;
-        }
+        // Winning hand
+        p = new Player(1);
+        for (int i = 0; i < 4; i++) p.addCard(new Card(7));
+        assertTrue(p.hasWinningHand(), "Expected winning hand of 7s");
 
-        // ---- Test 2: Winning hand ----
-        p = new Player(1, left, right, dummyGame);
-        for (int i = 0; i < 4; i++) {
-            p.addCard(new Card(7));
-        }
-
-        if (!p.hasWinningHand()) {
-            System.out.println("FAIL: Expected winning hand of 7s");
-            return;
-        }
-
-        // ---- Test 3: Discard logic ----
-        p = new Player(2, left, right, dummyGame);
+        // Discard logic
+        p = new Player(2);
+        // If Player needs to know its id to keep matching value cards, constructor already has id=2
         p.addCard(new Card(2));  // matching value
         p.addCard(new Card(5));  // should be discarded
         Card discarded = p.chooseDiscard();
-        if (discarded == null || discarded.getValue() != 5) {
-            System.out.println("FAIL: Discard logic incorrect");
-            return;
-        }
-
-        System.out.println("PASS: Player logic OK");
-    }
-
-    static class CardGameStub extends CardGame {
-        public CardGameStub() { super(1, createTempPack()); }
-
-        // Always report "game not over"
-        @Override public boolean isGameOver() { return false; }
-
-        // Helper to generate a tiny placeholder pack file
-        private static String createTempPack() {
-            try {
-                // Create accessible file in current directory
-                java.io.File f = new java.io.File("dummyPack.txt");
-                try (java.io.PrintWriter pw = new java.io.PrintWriter(f)) {
-                    for (int i = 0; i < 8; i++) pw.println(1);
-                }
-
-                // Debug info (optional)
-                System.out.println("DEBUG: temp pack path = " + f.getAbsolutePath());
-
-                return f.getAbsolutePath(); // ✅ inside method body
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to create dummy pack", e);
-            }
-        }
+        assertNotNull(discarded, "Should discard a card");
+        assertEquals(5, discarded.getValue(), "Should discard the non-matching card");
     }
 }

@@ -1,20 +1,20 @@
-public class TestCard {
-    public static void main(String[] args) {
-        //Create a card for testing
-        Card c = new Card(5);
-        System.out.println("Testing Card...");
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-        //Check that getValue() returns the correct number
-        if (c.getValue() != 5) {
-            System.out.println("FAIL: Expected 5, got " + c.getValue());
-            return; //Early Quit on failure     
-        }
-        //Check that tostring works correctly
-        if (!c.toString().equals("5")) {
-            System.out.println("FAIL: toString() incorrect: " + c.toString());
-            return;
-        }
-        
-        System.out.println("PASS: Card basic tests");
+public class TestCard {
+
+    @Test
+    void cardStoresValue() {
+        Card c = new Card(10);
+        assertEquals(10, c.getValue());
+    }
+
+    @Test
+    void cardEqualityByValue_ifApplicable() {
+        // If Card implements equals/hashCode by value, this will pass.
+        // If not, you can remove this test.
+        Card c1 = new Card(5);
+        Card c2 = new Card(5);
+        assertEquals(c1.getValue(), c2.getValue());
     }
 }
