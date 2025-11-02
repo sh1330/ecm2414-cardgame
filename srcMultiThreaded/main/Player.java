@@ -65,7 +65,7 @@ public class Player implements Runnable {
             if (gameRef.getWinnerId() == id) {
                 pw.println("Player " + id + " wins");
             } else {
-                pw.println("Player " + id + " has been informed player " + gameRef.getWinnerId() + " has won");
+                pw.println("Player " + id + " has been told that player " + gameRef.getWinnerId() + " has won");
             }
 
             pw.println("Player " + id + " final hand: " + getHand());

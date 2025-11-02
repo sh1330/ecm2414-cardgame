@@ -65,7 +65,7 @@ public class CardGame {
         if (!gameOver) {
             gameOver = true;
             winnerId = id;
-            System.out.println(">>> Player " + id + " wins the game! <<<");
+            System.out.println(">>> Player " + id + " wins! ");
             // notify others they can finish
             for (Player p : players) p.stopRunning();
         }
