@@ -1,4 +1,5 @@
-
+// Tests the Player class logic in isolation 
+ 
 public class TestPlayerLogic {
     public static void main(String[] args) {
         System.out.println("=== Running TestPlayerLogic ===");
@@ -6,9 +7,9 @@ public class TestPlayerLogic {
         // Stub decks and dummy game to satisfy constructor
         CardDeck left = new CardDeck(1);
         CardDeck right = new CardDeck(2);
-        CardGame dummyGame = new CardGameStub();
+        CardGame dummyGame = new CardGameStub(); // stub uses dummy pack file
 
-        // Test 1 losing hand
+        // ---- Test 1: Non-winning hand ----
         Player p = new Player(1, left, right, dummyGame);
         p.addCard(new Card(1));
         p.addCard(new Card(2));
@@ -20,7 +21,7 @@ public class TestPlayerLogic {
             return;
         }
 
-        // Test 2 Winning hand test
+        // ---- Test 2: Winning hand ----
         p = new Player(1, left, right, dummyGame);
         for (int i = 0; i < 4; i++) {
             p.addCard(new Card(7));
@@ -31,7 +32,7 @@ public class TestPlayerLogic {
             return;
         }
 
-        //Test 3 Discard logic 
+        // ---- Test 3: Discard logic ----
         p = new Player(2, left, right, dummyGame);
         p.addCard(new Card(2));  // matching value
         p.addCard(new Card(5));  // should be discarded
@@ -44,7 +45,6 @@ public class TestPlayerLogic {
         System.out.println("PASS: Player logic OK");
     }
 
-
     static class CardGameStub extends CardGame {
         public CardGameStub() { super(1, createTempPack()); }
 
@@ -54,13 +54,18 @@ public class TestPlayerLogic {
         // Helper to generate a tiny placeholder pack file
         private static String createTempPack() {
             try {
-                java.io.File f = java.io.File.createTempFile("dummyPack", ".txt");
-                java.io.PrintWriter pw = new java.io.PrintWriter(f);
-                for (int i = 0; i < 8; i++) pw.println(1);
-                pw.close();
-                return f.getAbsolutePath();
+                // Create accessible file in current directory
+                java.io.File f = new java.io.File("dummyPack.txt");
+                try (java.io.PrintWriter pw = new java.io.PrintWriter(f)) {
+                    for (int i = 0; i < 8; i++) pw.println(1);
+                }
+
+                // Debug info (optional)
+                System.out.println("DEBUG: temp pack path = " + f.getAbsolutePath());
+
+                return f.getAbsolutePath(); // ✅ inside method body
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Failed to create dummy pack", e);
             }
         }
     }

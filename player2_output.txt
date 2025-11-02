@@ -17,7 +17,5 @@ Player 2 discards 3 to deck 3
 Player 2 current hand: 2 2 2 4
 Player 2 discards 4 to deck 3
 Player 2 current hand: 2 2 2 3
-Player 2 discards 3 to deck 3
-Player 2 current hand: 2 2 2 2
 Player 2 has been informed player 1 has won
-Player 2 final hand: 2 2 2 2
+Player 2 final hand: 2 2 2 3
